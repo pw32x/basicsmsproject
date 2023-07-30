@@ -41,6 +41,15 @@ From a Windows command prompt, you can use the batch files in the build folder
 	
 The results will go into an "out" folder at the root of the project
 
+# Deploying
+
+If you have a compatible Everdrive, you can:
+
+	use deploy.bat to deploy the rom to the Everdrive
+	
+	or use the Debug_Deploy Visual Studio configuration
+	
+	NOTE: There are no debugging features after deploying
 
 # Visual Studio project
 

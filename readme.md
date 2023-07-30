@@ -39,7 +39,7 @@ From a Windows command prompt, you can use the batch files in the build folder
 	clean.bat
 	rebuild.bat
 	
-The results will go into an "out" folder
+The results will go into an "out" folder at the root of the project
 
 
 # Visual Studio project

@@ -7,12 +7,18 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "visualstudio", "visualstudi
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug_Deploy|x64 = Debug_Deploy|x64
+		Debug_Deploy|x86 = Debug_Deploy|x86
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AF575753-3018-438B-9CDC-FD1990ED19F7}.Debug_Deploy|x64.ActiveCfg = Debug_Deploy|x64
+		{AF575753-3018-438B-9CDC-FD1990ED19F7}.Debug_Deploy|x64.Build.0 = Debug_Deploy|x64
+		{AF575753-3018-438B-9CDC-FD1990ED19F7}.Debug_Deploy|x86.ActiveCfg = Debug_Deploy|Win32
+		{AF575753-3018-438B-9CDC-FD1990ED19F7}.Debug_Deploy|x86.Build.0 = Debug_Deploy|Win32
 		{AF575753-3018-438B-9CDC-FD1990ED19F7}.Debug|x64.ActiveCfg = Debug|x64
 		{AF575753-3018-438B-9CDC-FD1990ED19F7}.Debug|x64.Build.0 = Debug|x64
 		{AF575753-3018-438B-9CDC-FD1990ED19F7}.Debug|x86.ActiveCfg = Debug|Win32

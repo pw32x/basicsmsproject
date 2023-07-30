@@ -1,8 +1,11 @@
-PROGNAME=project
+#change to your preferred name
+#pass the PROGNAME name as a parameter to set a new rom name. "make PROGNAME=my_new_name"
+PROGNAME?=untitled_project
 
+#change to your devkitSMS folder
+DEVKITSMS_BASE=../../devkitSMS-master
 
 CC=sdcc
-DEVKITSMS_BASE=../../devkitSMS-master
 IHX2SMS=$(DEVKITSMS_BASE)/ihx2sms/Linux/ihx2sms
 SMSLIB_BASE=$(DEVKITSMS_BASE)/SMSlib
 SMSLIB_INCDIR=$(SMSLIB_BASE)/src

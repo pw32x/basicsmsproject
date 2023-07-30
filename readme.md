@@ -35,3 +35,13 @@ From a Windows command prompt, you can use the batch files in the build folder
 
 	
 The results will go into an "out" folder
+
+
+# Visual Studio project
+
+There's an included simple Visual Studio project. 
+
+Don't forget to tweak these values for your own project:
+
+Debugging -> Command: your emulator's location
+NMake -> Output: your rom file

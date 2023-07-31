@@ -1,0 +1,11 @@
+add sms support to gg2c
+	planar export
+	palette export
+
+set gg palette	
+draw gg sprite
+	
+	
+	
+automated asset export on build (make file?)
+copy to daily version folder

@@ -123,6 +123,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\source\main.c" />
+    <ClCompile Include="..\source\ninja_girl.c" />
+    <ClCompile Include="..\source\test_background.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\devkitSMS-master\SMSlib\src\SMSlib.h" />
+    <ClInclude Include="..\source\animationtypes.h" />
+    <ClInclude Include="..\source\ninja_girl.h" />
+    <ClInclude Include="..\source\test_background.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

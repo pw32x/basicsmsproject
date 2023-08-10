@@ -8,16 +8,22 @@
     <Filter Include="SMSLib">
       <UniqueIdentifier>{c9ef1464-5305-434c-8b8a-e75277b516a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\gamedata">
+      <UniqueIdentifier>{05528c9a-8ba6-4f21-99e1-6f4323763cb7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\ninja_girl.c">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\gamedata</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\test_background.c">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\source\background_tileset.c">
+      <Filter>Source Files\gamedata</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\background.c">
+      <Filter>Source Files\gamedata</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -28,9 +34,15 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\ninja_girl.h">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\gamedata</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\test_background.h">
+    <ClInclude Include="..\source\background.h">
+      <Filter>Source Files\gamedata</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\background_tileset.h">
+      <Filter>Source Files\gamedata</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\maptypes.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

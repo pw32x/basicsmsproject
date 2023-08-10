@@ -122,15 +122,18 @@
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\background.c" />
+    <ClCompile Include="..\source\background_tileset.c" />
     <ClCompile Include="..\source\main.c" />
     <ClCompile Include="..\source\ninja_girl.c" />
-    <ClCompile Include="..\source\test_background.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\devkitSMS-master\SMSlib\src\SMSlib.h" />
     <ClInclude Include="..\source\animationtypes.h" />
+    <ClInclude Include="..\source\background.h" />
+    <ClInclude Include="..\source\background_tileset.h" />
+    <ClInclude Include="..\source\maptypes.h" />
     <ClInclude Include="..\source\ninja_girl.h" />
-    <ClInclude Include="..\source\test_background.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include "SMSlib.h"
 #include "ninja_girl.h"
-#include "test_background.h"
+#include "background_tileset.h"
 
 unsigned char globalPalette[16] = 
 {
  0x00 , 0x01 , 0x10 , 0x15 , 0x06 , 0x04 , 0x17 , 0x15 , 0x39 , 0x0B , 0x2A , 0x09 , 0x2B , 0x3D , 0x1F , 0x3F
 };
-
 
 void Animation_DrawFrame(const AnimationFrame* frame, short x, short y)
 {
@@ -84,7 +83,9 @@ void main(void)
   
   // load tiles from Animation
   SMS_loadTiles(ninja_girl.tileData, 256, ninja_girl.totalTileCount * 32);
-  SMS_loadTiles(backgroundTileset, 0, 2 * 32);
+
+  SMS_loadTiles(background_tileset.tiles, 0, background_tileset.numTiles * 32);
+  //SMS_loadTiles(backgroundTileset, 0, 2 * 32);
   
 
   GameObject player;
@@ -96,7 +97,9 @@ void main(void)
   player.animationTime = 0;
   player.animationVdpTileIndex = 0;
 
-  SMS_loadTileMap(0, 0, smallBackgroundMap, sizeof(smallBackgroundMap));
+  //SMS_loadTileMap(0, 0, smallBackgroundMap, sizeof(smallBackgroundMap));
+  //SMS_loadTileMap(0, 0, 
+
 
   SMS_VDPturnOnFeature(VDPFEATURE_LEFTCOLBLANK);
 

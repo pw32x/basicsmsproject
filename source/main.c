@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include "SMSlib.h"
 #include "ninja_girl.h"
+#include "background.h"
 #include "background_tileset.h"
+
+#define TRUE 1
+#define FALSE 0
 
 unsigned char globalPalette[16] = 
 {
@@ -52,73 +56,135 @@ void GameObject_Update(GameObject* gameObject)
 	gameObject->animationTime++;
 }
 
-unsigned char ScrollManager_horizontalScroll = 0;
+unsigned short ScrollManager_horizontalScroll = 0;
+unsigned char Scroll_vdpHorizontalScroll = 0;
 
 // hard-coded column when we need to show more of the map. Replace
 // this with an actual larger map.
-unsigned short column[] =
-{
-	0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1
-};
+#define SCROLL_COLUMN_HEIGHT 24
+unsigned short Scroll_column[SCROLL_COLUMN_HEIGHT];
 
-void ScrollManager_Update()
+unsigned char Scroll_updateMapColumn = FALSE;
+unsigned char Scroll_speed = 1;
+
+void buildColumn(unsigned short tileColumn)
 {
-	if (ScrollManager_horizontalScroll % 8 == 0)
+	// from the tile column, get the metatile from the level map
+	unsigned short metatileColumn = (tileColumn >> 1) % background_map.mapWidth;
+
+	// figure out which column of the metatile to get. Metatiles contain two tile columns.
+	unsigned char metatileOffset = tileColumn & 1;
+
+	unsigned short* columnRunner = Scroll_column;
+
+	// for the height of a map column, fill the Scroll_column
+	for (unsigned char loop = 0; loop < background_map.mapHeight; loop++)
 	{
-		unsigned char tilePos = ScrollManager_horizontalScroll >> 3;
+		// get the index into the metatile loop-up table
+		unsigned short metatile_index = (background_map.metatileMap[metatileColumn + (loop * background_map.mapWidth)] * 4) + metatileOffset;
 
-		SMS_loadTileMapColumn((32 - tilePos) & 31, 0, column, 24);
+		// set the first tile
+		*columnRunner = background_tileset.metatile_lut[metatile_index];
+		columnRunner++;
+
+		// set the second tile
+		*columnRunner = background_tileset.metatile_lut[metatile_index + 2];
+		columnRunner++;
+	}
+}
+
+void Scroll_InitTilemap()
+{
+	// fill the map from the second column to the last.
+	for (int loop = 1; loop < 32; loop++)
+	{
+		buildColumn(loop);
+		SMS_loadTileMapColumn(loop, 0, Scroll_column, 24);
 	}
 
-	ScrollManager_horizontalScroll--;
+	// prep the next column to be visible where the first column is.
+	// we do this because columns are only updated when we hit an 8 pixel
+	// boundary when we scroll. At the start, we're already at the boundary.
+	// We won't see it anyway.
+	buildColumn(32);
+	SMS_loadTileMapColumn(0, 0, Scroll_column, 24);
+}
+
+void Scroll_Update()
+{
+	// here we move the vdp scrolling and logical map scrolling to the same speed
+	ScrollManager_horizontalScroll += Scroll_speed; // scrolling towards the right into the map
+	Scroll_vdpHorizontalScroll -= Scroll_speed; // vdp scrolls backwards in comparison
+
+	ScrollManager_horizontalScroll %= (background_map.mapWidth * 16); // clamp the scrolling to the pixel width of the map.
+
+	if (ScrollManager_horizontalScroll % 8 == 0) // when we hit a 8 pixel boundary, prep a new column to display
+	{
+		// figure out the column to update
+		unsigned short tileColumn = (ScrollManager_horizontalScroll >> 3) + 32; 
+		buildColumn(tileColumn);
+
+		Scroll_updateMapColumn = TRUE;
+	}	
 }
 
 void main(void)
 {
-  /* Clear VRAM */
-  SMS_VRAMmemsetW(0, 0x0000, 16384);
+	/* Clear VRAM */
+	SMS_VRAMmemsetW(0, 0x0000, 16384);
 
-  SMS_loadBGPalette(globalPalette);
-  SMS_loadSpritePalette(globalPalette);
+	SMS_loadBGPalette(globalPalette);
+	SMS_loadSpritePalette(globalPalette);
   
-  // load tiles from Animation
-  SMS_loadTiles(ninja_girl.tileData, 256, ninja_girl.totalTileCount * 32);
+	// load tiles from Animation
+	SMS_loadTiles(ninja_girl.tileData, 256, ninja_girl.totalTileCount * 32);
 
-  SMS_loadTiles(background_tileset.tiles, 0, background_tileset.numTiles * 32);
-  //SMS_loadTiles(backgroundTileset, 0, 2 * 32);
+	// load tiles for background
+	SMS_loadTiles(background_tileset.tiles, 0, background_tileset.numTiles * 32);
   
+	Scroll_updateMapColumn = FALSE;
 
-  GameObject player;
-  player.x = 122;
-  player.y = 88;
-  player.animation = &ninja_girl;
-  player.currentAnimationFrameIndex = 0;
-  player.currentAnimationFrame = ninja_girl.frames[player.currentAnimationFrameIndex];
-  player.animationTime = 0;
-  player.animationVdpTileIndex = 0;
-
-  //SMS_loadTileMap(0, 0, smallBackgroundMap, sizeof(smallBackgroundMap));
-  //SMS_loadTileMap(0, 0, 
+	SMS_VDPturnOnFeature(VDPFEATURE_LEFTCOLBLANK);
+	Scroll_InitTilemap();
 
 
-  SMS_VDPturnOnFeature(VDPFEATURE_LEFTCOLBLANK);
+	GameObject player;
+	player.x = 122;
+	player.y = 88;
+	player.animation = &ninja_girl;
+	player.currentAnimationFrameIndex = 0;
+	player.currentAnimationFrame = ninja_girl.frames[player.currentAnimationFrameIndex];
+	player.animationTime = 0;
+	player.animationVdpTileIndex = 0;
 
-  /* Turn on the display */
-  SMS_displayOn();
-  SMS_waitForVBlank ();
 
-  // infinite loop
-  for(;;) 
-  { 
-	  SMS_initSprites();
-	  GameObject_Update(&player);
-	  ScrollManager_Update();
-	  SMS_waitForVBlank ();
+	/* Turn on the display */
+	SMS_displayOn();
+	SMS_waitForVBlank ();
 
-	  SMS_setBGScrollX(ScrollManager_horizontalScroll);
-	  SMS_copySpritestoSAT();
-  }
+	// infinite loop
+	for(;;) 
+	{ 
+		// Game Loop
+		SMS_initSprites();
+		GameObject_Update(&player);
+		Scroll_Update();
+
+		// VBLANK
+
+		SMS_waitForVBlank ();
+		SMS_setBGScrollX(Scroll_vdpHorizontalScroll);
+
+		if (Scroll_updateMapColumn)
+		{
+			Scroll_updateMapColumn = FALSE;
+			unsigned char scrollMapColumn = Scroll_vdpHorizontalScroll >> 3;
+			SMS_loadTileMapColumn((32 - scrollMapColumn) & 31, 0, Scroll_column, 24);
+		}
+
+		SMS_copySpritestoSAT();
+	}
 }
 
 SMS_EMBED_SEGA_ROM_HEADER(9999,0);
-SMS_EMBED_SDSC_HEADER_AUTO_DATE(1,0,"raphnet","basic example","A simple example");
+SMS_EMBED_SDSC_HEADER_AUTO_DATE(1,0,"pw","basicsmsproject","A basic SMS example project with devkitSMS");
